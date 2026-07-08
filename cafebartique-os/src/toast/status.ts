@@ -1,4 +1,5 @@
 import { Context } from "hono";
+import { getToastAccessToken } from "./auth";
 
 export async function toastStatus(c: Context<{ Bindings: Env }>) {
   const env = c.env;
@@ -13,14 +14,34 @@ export async function toastStatus(c: Context<{ Bindings: Env }>) {
 
   const missingSecrets = requiredSecrets.filter((key) => !env[key as keyof Env]);
 
-  return c.json({
-    service: "Toast POS",
-    status: missingSecrets.length === 0 ? "Ready for authentication" : "Missing configuration",
-    connected: false,
-    missingSecrets,
-    message:
-      missingSecrets.length === 0
-        ? "Toast credentials are configured. Next step is live authentication."
-        : "Add the missing Toast environment variables before authentication.",
-  });
+  if (missingSecrets.length > 0) {
+    return c.json({
+      service: "Toast POS",
+      status: "Missing configuration",
+      connected: false,
+      missingSecrets,
+      message: "Add the missing Toast environment variables before authentication.",
+    });
+  }
+
+  try {
+    await getToastAccessToken(env);
+
+    return c.json({
+      service: "Toast POS",
+      status: "Connected",
+      connected: true,
+      message: "Toast authentication succeeded.",
+    });
+  } catch (error: any) {
+    return c.json(
+      {
+        service: "Toast POS",
+        status: "Authentication failed",
+        connected: false,
+        message: error.message,
+      },
+      500
+    );
+  }
 }
