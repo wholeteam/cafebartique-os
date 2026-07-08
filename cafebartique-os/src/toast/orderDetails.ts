@@ -1,33 +1,18 @@
 import { Context } from "hono";
-import { toastGet } from "./client";
-
-function getBusinessDate() {
-  const today = new Date();
-
-  return (
-    today.getFullYear().toString() +
-    String(today.getMonth() + 1).padStart(2, "0") +
-    String(today.getDate()).padStart(2, "0")
-  );
-}
+import { getOrderIdsForToday } from "../services/orders";
 
 export async function toastOrderDetails(c: Context<{ Bindings: Env }>) {
   try {
-    const businessDate = getBusinessDate();
-
-    const orderIds = await toastGet(
-      c.env,
-      `/orders/v2/orders?businessDate=${businessDate}`
-    );
+    const { businessDate, orderIds } = await getOrderIdsForToday(c.env);
 
     return c.json({
       service: "Toast Order Details",
       connected: true,
       businessDate,
-      orderCount: Array.isArray(orderIds) ? orderIds.length : 0,
+      orderCount: orderIds.length,
       orderIds,
       nextStep:
-        "Next we will use these order IDs to fetch detailed order data and calculate sales metrics.",
+        "Next we will fetch full order details and calculate sales metrics.",
     });
   } catch (error: any) {
     return c.json(
