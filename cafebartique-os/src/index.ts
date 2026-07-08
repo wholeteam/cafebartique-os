@@ -1,3 +1,4 @@
+import { toastSales } from "./toast/sales";
 import { toastStatus } from "./toast/status";
 import { fromHono } from "chanfana";
 import { Hono } from "hono";
@@ -41,4 +42,5 @@ app.get("/inventory", (c) =>
   })
 );
 app.get("/toast/status", toastStatus);
+app.get("/toast/sales", toastSales);
 export default app;
