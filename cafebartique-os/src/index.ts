@@ -1,6 +1,7 @@
 import { toastSales } from "./toast/sales";
 import { toastStatus } from "./toast/status";
 import { fromHono } from "chanfana";
+import { executiveDashboard } from "./dashboard/executive";
 import { Hono } from "hono";
 
 const app = new Hono<{ Bindings: Env }>();
@@ -43,4 +44,5 @@ app.get("/inventory", (c) =>
 );
 app.get("/toast/status", toastStatus);
 app.get("/toast/sales", toastSales);
+app.get("/dashboard/executive", executiveDashboard);
 export default app;
