@@ -1,5 +1,6 @@
 import { toastSales } from "./toast/sales";
 import { toastStatus } from "./toast/status";
+import { toastMenuExport } from "./toast/menu";
 import { fromHono } from "chanfana";
 import { executiveDashboard } from "./dashboard/executive";
 import { Hono } from "hono";
@@ -44,5 +45,6 @@ app.get("/inventory", (c) =>
 );
 app.get("/toast/status", toastStatus);
 app.get("/toast/sales", toastSales);
+app.get("/toast/menu-export", toastMenuExport);
 app.get("/dashboard/executive", executiveDashboard);
 export default app;
