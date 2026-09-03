@@ -1,45 +1,46 @@
 /**
- * For more details on how to configure Wrangler, refer to:
- * https://developers.cloudflare.com/workers/wrangler/configuration/
+ * Cafe Bartique OS
+ * Cloudflare Worker Configuration
  */
 {
-	"$schema": "node_modules/wrangler/config-schema.json",
-	"name": "cafebartique-os",
-	"main": "src/index.ts",
-	"compatibility_date": "2026-07-07",
-	"observability": {
-		"enabled": true
-	},
-	"upload_source_maps": true,
-	"compatibility_flags": [
-		"nodejs_compat"
-	]
-	/**
-	 * Smart Placement
-	 * https://developers.cloudflare.com/workers/configuration/smart-placement/#smart-placement
-	 */
-	// "placement": {  "mode": "smart" }
-	/**
-	 * Bindings
-	 * Bindings allow your Worker to interact with resources on the Cloudflare Developer Platform, including
-	 * databases, object storage, AI inference, real-time communication and more.
-	 * https://developers.cloudflare.com/workers/runtime-apis/bindings/
-	 */
-	/**
-	 * Environment Variables
-	 * https://developers.cloudflare.com/workers/wrangler/configuration/#environment-variables
-	 * Note: Use secrets to store sensitive data.
-	 * https://developers.cloudflare.com/workers/configuration/secrets/
-	 */
-	// "vars": {  "MY_VARIABLE": "production_value" }
-	/**
-	 * Static Assets
-	 * https://developers.cloudflare.com/workers/static-assets/binding/
-	 */
-	// "assets": {  "directory": "./public/",  "binding": "ASSETS" }
-	/**
-	 * Service Bindings (communicate between multiple Workers)
-	 * https://developers.cloudflare.com/workers/wrangler/configuration/#service-bindings
-	 */
-	// "services": [  {   "binding": "MY_SERVICE",   "service": "my-service"  } ]
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "cafebartique-os",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-07-07",
+
+  "observability": {
+    "enabled": true
+  },
+
+  "upload_source_maps": true,
+
+  "compatibility_flags": [
+    "nodejs_compat"
+  ],
+
+  /**
+   * Daily Toast Analytics Sync
+   *
+   * Cloudflare Cron uses UTC.
+   * 09:30 UTC = 5:30 AM Eastern during daylight-saving time.
+   */
+  "triggers": {
+    "crons": [
+      "30 9 * * *"
+    ]
+  },
+
+  /**
+   * Cloudflare KV Storage
+   */
+  "kv_namespaces": [
+    {
+      "binding": "TOAST_TOKEN_CACHE",
+      "id": "cff17eacd085460eb6d7c3739a5b98ca"
+    },
+    {
+      "binding": "ANALYTICS_CACHE",
+      "id": "72ac5d38537c4086a8f34c5656f02216"
+    }
+  ]
 }
