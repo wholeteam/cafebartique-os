@@ -2,6 +2,7 @@ import { toastSales } from "./toast/sales";
 import { toastStatus } from "./toast/status";
 import { toastLabor } from "./toast/labor";
 import { toastMenuExport } from "./toast/menu";
+import { toastConfigExport } from "./toast/configExport";
 import { getToastLaborAnalyticsForBusinessDate } from "./toast/laborAnalytics";
 import { fromHono } from "chanfana";
 import { executiveDashboard } from "./dashboard/executive";
@@ -45,6 +46,7 @@ app.get("/toast/status", toastStatus);
 app.get("/toast/sales", toastSales);
 app.get("/toast/labor", toastLabor);
 app.get("/toast/menu-export", toastMenuExport);
+app.get("/toast/config-export", toastConfigExport);
 
 app.get("/toast/labor-analytics", async (c) => {
   try {
